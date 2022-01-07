@@ -29,7 +29,7 @@ void main(void)
     vec3 diffuse = diff * lightColor;
     
     // Specular
-    float specularStrength = 0.5f;
+    float specularStrength = 0.3f;
     vec3 viewDir = normalize(inViewPos - FragPos);//vector catre observator normalizat (V)
     vec3 reflectDir = reflect(-lightDir, normala); // reflexia razei de lumina (R)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 1);

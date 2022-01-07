@@ -1,10 +1,8 @@
 ﻿  3DSceneMain.cpp
 D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(39,18): warning C4305: 'initializing': truncation from 'double' to 'float'
 D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(53,87): warning C4305: 'initializing': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(79,13): warning C4305: '-=': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(82,13): warning C4305: '+=': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(99,14): warning C4305: '-=': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(102,14): warning C4305: '+=': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(105,15): warning C4305: '+=': truncation from 'double' to 'float'
-D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(108,15): warning C4305: '-=': truncation from 'double' to 'float'
+D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(107,25): warning C4305: '+=': truncation from 'double' to 'float'
+D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(110,25): warning C4305: '-=': truncation from 'double' to 'float'
+D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(113,26): warning C4305: '-=': truncation from 'double' to 'float'
+D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\3DSceneMain.cpp(116,26): warning C4305: '+=': truncation from 'double' to 'float'
   3DScene.vcxproj -> D:\FMI AN 3 SEM 1\Grafica\3DScene\3DScene\x64\Debug\3DScene.exe

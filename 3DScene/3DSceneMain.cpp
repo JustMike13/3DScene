@@ -42,8 +42,8 @@ float PI=3.141592;
 glm::mat4 myMatrix, matrRot; 
 
 // elemente pentru matricea de vizualizare
-float Refx=0.0f, Refy=0.0f, Refz=0.0f;
-float alpha = PI/8, beta = 0.0f, dist=400.0f;
+float Refx=-30.0f, Refy=0.0f, Refz=0.0f;
+float alpha = PI/8, beta = - PI / 2, dist=400.0f;
 float Obsx, Obsy, Obsz;
 
 float Vx=0.0, Vy=0.0, Vz=1.0;
@@ -54,10 +54,22 @@ float width=800, height=600, xwmin=-800.f, xwmax=800, ywmin=-600, ywmax=600, zne
 glm::mat4 projection;
  
 // sursa de lumina
-float xL = 1000.f, yL = 100.f, zL = 400.f;
+float xL = 200.f, yL = -300.f, zL = 300.f;
 
 // matricea umbrei
 float matrUmbra[4][4];
+
+// obiecte si pozitii
+float xs[10] = { 0, 0, 0, 0, 0 };
+float ys[10] = { 0, 0, 0, 0, 0 };
+float zs[10] = { 0, 0, 0, 0, 0 };
+
+int curObject = 0;
+int nrObjects = 4;
+bool focused = false;
+
+//cursor
+int cursorXs[] = {-170, -80, 30, 130};
 
 
 void displayMatrix ( )
@@ -75,18 +87,34 @@ void processNormalKeys(unsigned char key, int x, int y)
 {
 
 	switch (key) {
-		case 'l' :
-			Vx -= 0.1;
+		case 'a' :
+            if (curObject > 0)
+                curObject--;
 			break;
-		case 'r' :
-			Vx += 0.1;
+		case 'd' :
+            if (curObject < nrObjects - 1)
+                curObject++;
 			break;
-		case '+' :
-			dist+=5;
+		case 'w' :
+            if (ys[curObject] < 100)
+                ys[curObject] += 10;
 			break;
-		case '-' :
-			dist-=5;
+		case 's' :
+            if (ys[curObject] > -100)
+                ys[curObject] -= 10;
 			break;
+        case '6':
+            beta += 0.01;
+            break;
+        case '4':
+            beta -= 0.01;
+            break;
+        case '5':
+            alpha -= 0.01;
+            break;
+        case '8':
+            alpha += 0.01;
+            break;
 
 	}
 if (key == 27)
@@ -96,16 +124,20 @@ void processSpecialKeys(int key, int xx, int yy) {
 
 	switch (key) {
 		case GLUT_KEY_LEFT :
-			beta-=0.01;
+            if (xs[curObject] > -100)
+                xs[curObject] -= 10;
 			break;
 		case GLUT_KEY_RIGHT :
-			beta+=0.01;
+            if (xs[curObject] < 100)
+                xs[curObject] += 10;
 			break;
 		case GLUT_KEY_UP :
-			alpha+=0.01;
+            if (zs[curObject] < 100)
+                zs[curObject] += 10;
 			break;
 		case GLUT_KEY_DOWN :
-			alpha-=0.01;
+            if (zs[curObject] > -50)
+                zs[curObject] -= 10;
 			break;
 	}
 }
@@ -115,67 +147,96 @@ void CreateVBO(void)
     // varfurile 
     GLfloat Vertices[] = {
 
-        // coordonate                   // culori			// normale
+        // coordonate                    // culori			// normale
         // varfuri "ground"
-       -1500.0f,  -1500.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-        1500.0f,  -1500.0f, 0.0f, 1.0f,  1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-        1500.0f,  1500.0f,  0.0f, 1.0f,  1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-       -1500.0f,  1500.0f,  0.0f, 1.0f,  1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-       // varfuri cub
-        -50.0f,  -50.0f, 50.0f, 1.0f,  1.0f, 0.5f, 0.2f,  -1.0f, -1.0f, -1.0f,
-        50.0f,  -50.0f,  50.0f, 1.0f,  1.0f, 0.5f, 0.2f,  1.0f, -1.0f, -1.0f,
-        50.0f,  50.0f,  50.0f, 1.0f,   1.0f, 0.5f, 0.2f,  1.0f, 1.0f, -1.0f,
-        -50.0f,  50.0f, 50.0f, 1.0f,   1.0f, 0.5f, 0.2f,  -1.0f, 1.0f, -1.0f,
-        -50.0f,  -50.0f, 150.0f, 1.0f,  1.0f, 0.5f, 0.2f,  -1.0f, -1.0f, 1.0f,
-        50.0f,  -50.0f,  150.0f, 1.0f,  1.0f, 0.5f, 0.2f,  1.0f, -1.0f, 1.0f,
-        50.0f,  50.0f,  150.0f, 1.0f,   1.0f, 0.5f, 0.2f,  1.0f, 1.0f, 1.0f,
-        -50.0f,  50.0f, 150.0f, 1.0f,   1.0f, 0.5f, 0.2f,  -1.0f, 1.0f, 1.0f,
-        // varfuri con
-         -40.0f, -69.28f, 0.0f, 1.0f, 0.1f, 1.0f, 0.2f, -40.0f, -69.28f, 80.0f,
-        40.0f,   -69.28f, 0.0f, 1.0f, 0.1f, 1.0f, 0.2f, 40.0f, -69.28f, 80.0f,
-        80.0f,   0.0f,    0.0f, 1.0f, 0.1f, 1.0f, 0.2f, 80.0f, 0.0f, 80.0f,
-        40.0f,   69.28f,  0.0f, 1.0f, 0.1f, 1.0f, 0.2f, 40.0f, 69.28f, 80.0f,
-         -40.0f, 69.28f,  0.0f, 1.0f, 0.1f, 1.0f, 0.2f, -40.0f, 69.28f, 80.0f,
-        -80.0f,  0.0f,    0.0f, 1.0f, 0.1f, 1.0f, 0.2f, -80.0f, 0.0f, 80.0f,
-         0.0f,   0.0f,  100.0f, 1.0f, 0.3f, 1.0f, 0.2f, 0.0f, 0.0f, 1.0f,
-         // new
-        100.0f,  -50.0f, 50.0f, 1.0f,  1.0f, 0.5f, 0.2f,   -1.0f, -1.0f, -1.0f, // 19
-        200.0f,  -50.0f, 50.0f, 1.0f,  1.0f, 0.5f, 0.2f,    1.0f, -1.0f, -1.0f, // 20
-        200.0f,   50.0f, 50.0f, 1.0f,  1.0f, 0.5f, 0.2f,    1.0f,  1.0f, -1.0f, // 21
-        100.0f,   50.0f, 50.0f, 1.0f,  1.0f, 0.5f, 0.2f,   -1.0f,  1.0f, -1.0f, // 22
-        100.0f,  -50.0f, 100.0f, 1.0f,  1.0f, 0.5f, 0.2f,  -1.0f, -1.0f,  1.0f, // 23
-        200.0f,  -50.0f, 100.0f, 1.0f,  1.0f, 0.5f, 0.2f,   1.0f, -1.0f,  1.0f, // 24
-        200.0f,   50.0f, 100.0f, 1.0f,  1.0f, 0.5f, 0.2f,   1.0f,  1.0f,  1.0f, // 25
-        100.0f,   50.0f, 100.0f, 1.0f,  1.0f, 0.5f, 0.2f,  -1.0f,  1.0f,  1.0f, // 26
+       -1500.0f,  -1500.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+        1500.0f,  -1500.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+        1500.0f,  1500.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+       -1500.0f,  1500.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+       // varfuri cub == object #0
+       -200.0f,  -30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f, -1.0f, //  4
+       -140.0f,  -30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f, -1.0f, //  5
+       -140.0f,   30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f, -1.0f, //  6
+       -200.0f,   30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f, -1.0f, //  7
+       -200.0f,  -30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f,  1.0f, //  8
+       -140.0f,  -30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f,  1.0f, //  9
+       -140.0f,   30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f,  1.0f, // 10
+       -200.0f,   30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f,  1.0f, // 11
+
+       //varfuri piramida == object #1
+       -100.0f,  -30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f, -1.0f, -1.0f, // 12
+        -60.0f,  -30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f, -1.0f, -1.0f, // 13
+        -60.0f,   30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f,  1.0f, -1.0f, // 14
+       -100.0f,   30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f,  1.0f, -1.0f, // 15
+        -80.0f,   0.0f,   110.0f, 1.0f,    0.3f, 0.3f, 1.0f,    0.0f,  0.0f,  1.0f, // 16
+
+       //varfuri trunchi de piramida == object #2
+          0.0f,  -30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f, -1.0f, // 17
+         60.0f,  -30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f, -1.0f, // 18
+         60.0f,   30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f, -1.0f, // 19
+          0.0f,   30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f, -1.0f, // 20
+         15.0f,  -15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f,  1.0f, // 21
+         45.0f,  -15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f,  1.0f, // 22
+         45.0f,   15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f,  1.0f, // 23
+         15.0f,   15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f,  1.0f, // 24
+
+        //varfuri paralelipiped == object #3
+        100.0f,  -30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f, -1.0f, // 25
+        160.0f,  -30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f, -1.0f, // 26
+        160.0f,   30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f, -1.0f, // 27
+        100.0f,   30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f, -1.0f, // 28
+        100.0f,  -30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f,  1.0f, // 29
+        160.0f,  -30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f,  1.0f, // 30
+        160.0f,   30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f,  1.0f, // 31
+        100.0f,   30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f,  1.0f, // 32
+
+        //varfuri cursor
+        -5.0f,   -5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 33
+         5.0f,   -5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 34
+         5.0f,    5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 35
+        -5.0f,    5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 36
+         
     };
 
     // indicii pentru varfuri
     GLubyte Indices[] = {
 
-      // fetele "ground"
+       // fetele "ground"
        1, 2, 0,   2, 0, 3,
-       // fetele cubului
-       5, 6, 4,   6, 4, 7,   
-       6, 7, 10, 10, 7, 11,
-       11, 7, 8,   8, 7, 4,
-       8, 4, 9,   9, 4, 5,
-       5, 6, 9,   9, 6, 10,
-       9, 10, 8,  8, 10, 11,
-       // fetele conului
-       12, 13, 18, 
-       13, 14, 18,
-       14, 15, 18,
-       15, 16, 18,
-       16, 17, 18,
-       17, 12, 18,
-       //new
-       19, 22, 20, 22, 21, 20,
-       19, 24, 23, 24, 19, 20,
-       20, 21, 24, 24, 21, 25,
-       21, 22, 25, 25, 22, 26,
-       26, 22, 23, 22, 19, 23,
-       26, 23, 24, 26, 24, 25
+       
+       // fete cub
+       4,  7,  5,   7,  6,  5,
+       4,  5,  9,   4,  9,  8,
+       5,  6,  9,   6, 10,  9,
+       6,  7, 10,   7, 11, 10,
+       7,  4,  8,   7,  8, 11,
+       8,  9, 10,   8, 10, 11,
 
+       // fete piramida
+        12, 13, 16,
+        13, 14, 16,
+        14, 15, 16,
+        15, 12, 16,
+
+       // fete trunchi de piramida
+       17, 20, 19,  17, 19, 18,
+       17, 18, 22,  17, 22, 21,
+       18, 19, 23,  18, 23, 22,
+       19, 20, 24,  19, 24, 23, 
+       20, 17, 21,  20, 21, 24,
+       21, 22, 23,  21, 23, 24,
+
+       // fete paralelipiped
+       25, 28, 27,  25, 27, 26,
+       25, 26, 30,  25, 30, 29,
+       26, 27, 31,  26, 31, 30,
+       27, 28, 32,  27, 32, 31,
+       28, 25, 29,  28, 29, 32,
+       29, 30, 31,  29, 31, 32,
+
+       // cursor
+       33, 34, 35,
+       33, 35, 36,
     };
 
     // se creeaza un VAO (Vertex Array Object) - util cand se utilizeaza mai multe VBO
@@ -294,15 +355,55 @@ void RenderFunction(void)
   glUniform3f(lightPosLoc, xL, yL, zL);
   glUniform3f(viewPosLoc, Obsx, Obsy, Obsz);
 
-  // desenare cub
+  // desenare ground
   codCol = 0;
   glUniform1i(codColLocation, codCol);
   myMatrix = glm::mat4(1.0f);
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, 0);
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE,(void*)(6));
+  
+  //desenare cub
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[0], ys[0], zs[0]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(6));
 
+  //desenare piramida
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[1], ys[1], zs[1]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, (void*)(42));
+
+  //desenare trunchi de piramida
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[2], ys[2], zs[2]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(54));
+
+  //desenare paralelipiped
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[3], ys[3], zs[3]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(90));
+
+  //desenare cursor
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(cursorXs[curObject] + xs[curObject], ys[curObject], 0));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (void*)(126));
+
+  /*
   // desenare con
   myMatrix= glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 150.0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
@@ -316,16 +417,41 @@ void RenderFunction(void)
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (void*)(60));
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(66));
-
+  */
 
   // desenare umbra cub
   codCol = 1;
   glUniform1i(codColLocation, codCol);
-  myMatrix = glm::mat4(1.0f);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[0], ys[0], zs[0]));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(6));
 
+  //desenare umbra piramida
+  codCol = 1;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[1], ys[1], zs[1]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_BYTE, (void*)(42));
+
+  //desenare umbra trunchi de piramida
+  codCol = 1;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[2], ys[2], zs[2]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(54));
+
+  //desenare umbra paralelipiped
+  codCol = 1;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(xs[3], ys[3], zs[3]));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(90));
+
+  /*
   // desenare umbra con
   myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.f, 0.f, 150.0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
@@ -337,7 +463,7 @@ void RenderFunction(void)
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(66));
-
+  */
   glutSwapBuffers(); 
   glFlush ( );
 }
