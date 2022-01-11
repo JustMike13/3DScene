@@ -96,12 +96,12 @@ void processNormalKeys(unsigned char key, int x, int y)
                 curObject++;
 			break;
 		case 'w' :
-            if (ys[curObject] < 100)
-                ys[curObject] += 10;
+            if (zs[curObject] < 100)
+                zs[curObject] += 10;
 			break;
 		case 's' :
-            if (ys[curObject] > -100)
-                ys[curObject] -= 10;
+            if (zs[curObject] > 0)
+                zs[curObject] -= 10;
 			break;
         case '6':
             beta += 0.01;
@@ -132,12 +132,12 @@ void processSpecialKeys(int key, int xx, int yy) {
                 xs[curObject] += 10;
 			break;
 		case GLUT_KEY_UP :
-            if (zs[curObject] < 100)
-                zs[curObject] += 10;
+            if (ys[curObject] < 100)
+                ys[curObject] += 10;
 			break;
 		case GLUT_KEY_DOWN :
-            if (zs[curObject] > -50)
-                zs[curObject] -= 10;
+            if (ys[curObject] > -100)
+                ys[curObject] -= 10;
 			break;
 	}
 }
@@ -148,60 +148,84 @@ void CreateVBO(void)
     GLfloat Vertices[] = {
 
         // coordonate                    // culori			// normale
-        // varfuri "ground"
-       -1500.0f,  -1500.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-        1500.0f,  -1500.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-        1500.0f,  1500.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
-       -1500.0f,  1500.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+        // varfuri tabletop
+       -350.0f,  -150.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+        350.0f,  -150.0f, 0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+        350.0f,  250.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
+       -350.0f,  250.0f,  0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f,
        // varfuri cub == object #0
-       -200.0f,  -30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f, -1.0f, //  4
-       -140.0f,  -30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f, -1.0f, //  5
-       -140.0f,   30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f, -1.0f, //  6
-       -200.0f,   30.0f,   50.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f, -1.0f, //  7
-       -200.0f,  -30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f,  1.0f, //  8
-       -140.0f,  -30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f,  1.0f, //  9
-       -140.0f,   30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f,  1.0f, // 10
-       -200.0f,   30.0f,  110.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f,  1.0f, // 11
+       -200.0f,  -30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f, -1.0f, //  4
+       -140.0f,  -30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f, -1.0f, //  5
+       -140.0f,   30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f, -1.0f, //  6
+       -200.0f,   30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f, -1.0f, //  7
+       -200.0f,  -30.0f,  60.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f,  1.0f, //  8
+       -140.0f,  -30.0f,  60.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f,  1.0f, //  9
+       -140.0f,   30.0f,  60.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f,  1.0f,  1.0f, // 10
+       -200.0f,   30.0f,  60.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f,  1.0f,  1.0f, // 11
 
        //varfuri piramida == object #1
-       -100.0f,  -30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f, -1.0f, -1.0f, // 12
-        -60.0f,  -30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f, -1.0f, -1.0f, // 13
-        -60.0f,   30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f,  1.0f, -1.0f, // 14
-       -100.0f,   30.0f,   50.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f,  1.0f, -1.0f, // 15
-        -80.0f,   0.0f,   110.0f, 1.0f,    0.3f, 0.3f, 1.0f,    0.0f,  0.0f,  1.0f, // 16
+       -100.0f,  -30.0f,   0.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f, -1.0f, -1.0f, // 12
+        -60.0f,  -30.0f,   0.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f, -1.0f, -1.0f, // 13
+        -60.0f,   30.0f,   0.0f, 1.0f,    0.3f, 0.3f, 1.0f,    1.0f,  1.0f, -1.0f, // 14
+       -100.0f,   30.0f,   0.0f, 1.0f,    0.3f, 0.3f, 1.0f,   -1.0f,  1.0f, -1.0f, // 15
+        -80.0f,   0.0f,   60.0f, 1.0f,    0.3f, 0.3f, 1.0f,    0.0f,  0.0f,  1.0f, // 16
 
        //varfuri trunchi de piramida == object #2
-          0.0f,  -30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f, -1.0f, // 17
-         60.0f,  -30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f, -1.0f, // 18
-         60.0f,   30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f, -1.0f, // 19
-          0.0f,   30.0f,   50.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f, -1.0f, // 20
-         15.0f,  -15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f,  1.0f, // 21
-         45.0f,  -15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f,  1.0f, // 22
-         45.0f,   15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f,  1.0f, // 23
-         15.0f,   15.0f,   90.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f,  1.0f, // 24
+          0.0f,  -30.0f,   0.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f, -1.0f, // 17
+         60.0f,  -30.0f,   0.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f, -1.0f, // 18
+         60.0f,   30.0f,   0.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f, -1.0f, // 19
+          0.0f,   30.0f,   0.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f, -1.0f, // 20
+         15.0f,  -15.0f,  40.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f, -1.0f,  1.0f, // 21
+         45.0f,  -15.0f,  40.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f, -1.0f,  1.0f, // 22
+         45.0f,   15.0f,  40.0f, 1.0f,    0.0f, 1.0f, 0.7f,    1.0f,  1.0f,  1.0f, // 23
+         15.0f,   15.0f,  40.0f, 1.0f,    0.0f, 1.0f, 0.7f,   -1.0f,  1.0f,  1.0f, // 24
 
         //varfuri paralelipiped == object #3
-        100.0f,  -30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f, -1.0f, // 25
-        160.0f,  -30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f, -1.0f, // 26
-        160.0f,   30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f, -1.0f, // 27
-        100.0f,   30.0f,   50.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f, -1.0f, // 28
-        100.0f,  -30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f,  1.0f, // 29
-        160.0f,  -30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f,  1.0f, // 30
-        160.0f,   30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f,  1.0f, // 31
-        100.0f,   30.0f,  150.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f,  1.0f, // 32
+        100.0f,  -30.0f,    0.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f, -1.0f, // 25
+        160.0f,  -30.0f,    0.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f, -1.0f, // 26
+        160.0f,   30.0f,    0.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f, -1.0f, // 27
+        100.0f,   30.0f,    0.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f, -1.0f, // 28
+        100.0f,  -30.0f,  100.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f, -1.0f,  1.0f, // 29
+        160.0f,  -30.0f,  100.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f, -1.0f,  1.0f, // 30
+        160.0f,   30.0f,  100.0f, 1.0f,    0.5f, 1.0f, 0.3f,    1.0f,  1.0f,  1.0f, // 31
+        100.0f,   30.0f,  100.0f, 1.0f,    0.5f, 1.0f, 0.3f,   -1.0f,  1.0f,  1.0f, // 32
 
         //varfuri cursor
-        -5.0f,   -5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 33
-         5.0f,   -5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 34
-         5.0f,    5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 35
-        -5.0f,    5.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 36
+        -5.0f,   -50.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 33
+         5.0f,   -50.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 34
+         2.5f,   -35.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 35
          
+        // varfuri picior masa
+       -350.0f,  -150.0f, -300.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 36
+       -350.0f,  -130.0f, -300.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 37
+       -330.0f,  -130.0f, -300.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 38
+       -330.0f,  -150.0f, -300.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 39
+       -350.0f,  -150.0f,    0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 40
+       -350.0f,  -130.0f,    0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 41
+       -330.0f,  -130.0f,    0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 42
+       -330.0f,  -150.0f,    0.0f, 1.0f,   1.0f, 1.0f, 0.9f,  0.0f, 0.0f, 1.0f, // 43
+
+        // varfuri picior masa pentru muchii/contur
+       -350.0f,  -150.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 44
+       -350.0f,  -130.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 45
+       -330.0f,  -130.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 46
+       -330.0f,  -150.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 47
+       -350.0f,  -150.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 48
+       -350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 49
+       -330.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 50
+       -330.0f,  -150.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 51
+
+       // varfuri tabletop pentru contur
+       -350.0f,  -530.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 52
+        350.0f,  -530.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 53
+        350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 54
+       -350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 55
     };
 
     // indicii pentru varfuri
     GLubyte Indices[] = {
 
-       // fetele "ground"
+       // fetele tabletop
        1, 2, 0,   2, 0, 3,
        
        // fete cub
@@ -236,7 +260,29 @@ void CreateVBO(void)
 
        // cursor
        33, 34, 35,
-       33, 35, 36,
+
+       //fete picior masa
+       36, 39, 38,  36, 38, 37,
+       36, 37, 41,  36, 41, 40,
+       37, 38, 42,  37, 42, 41,
+       38, 39, 43,  38, 43, 42,
+       39, 36, 40,  39, 40, 43,
+       40, 41, 42,  40, 42, 43,
+       //muchii picior
+       44, 45,
+       45, 46,
+       46, 47,
+       47, 44,
+       44, 48,
+       45, 49, 
+       46, 50, 
+       47, 51,
+
+       //contur masa
+       52, 53,
+       53, 54,
+       54, 55,
+       55, 52
     };
 
     // se creeaza un VAO (Vertex Array Object) - util cand se utilizeaza mai multe VBO
@@ -401,7 +447,57 @@ void RenderFunction(void)
   myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(cursorXs[curObject] + xs[curObject], ys[curObject], 0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, (void*)(126));
+  glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (void*)(126));
+
+  glLineWidth(3);
+
+      //desenare primul picior al mesei
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::mat4(1.0f);
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
+  glDrawElements(GL_LINES, 16, GL_UNSIGNED_BYTE, (void*)(165));
+
+  //desenare al doilea picior al mesei
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(680, 0, 0));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
+  glDrawElements(GL_LINES, 16, GL_UNSIGNED_BYTE, (void*)(165));
+
+  //desenare al treilea picior al mesei
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(680, 380, 0));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
+  glDrawElements(GL_LINES, 16, GL_UNSIGNED_BYTE, (void*)(165));
+
+  //desenare al patrulea picior al mesei
+  
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 380, 0));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
+  glDrawElements(GL_LINES, 16, GL_UNSIGNED_BYTE, (void*)(175));
+
+
+  // desenare contur masa
+  /*
+  codCol = 0;
+  glUniform1i(codColLocation, codCol);*/
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(200, -380, 0));
+  myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
+  glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
+  glDrawElements(GL_LINES, 8, GL_UNSIGNED_BYTE, (void*)(191));
+
 
   /*
   // desenare con
@@ -480,7 +576,7 @@ int main(int argc, char* argv[])
   glutInitDisplayMode(GLUT_RGB|GLUT_DEPTH|GLUT_DOUBLE);
   glutInitWindowPosition (100,100); 
   glutInitWindowSize(1200,900); 
-  glutCreateWindow("Implementarea modelului de iluminare"); 
+  glutCreateWindow("3DScene - Proiect 2"); 
   glewInit(); 
   Initialize( );
   glutIdleFunc(RenderFunction);

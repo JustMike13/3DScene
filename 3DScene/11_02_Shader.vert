@@ -38,7 +38,6 @@ void main(void)
 	if ( codCol==1 )
 		gl_Position = projection*view*matrUmbra*myMatrix*in_Position;
         FragPos = vec3(gl_Position);
-    
  
    } 
  
