@@ -43,7 +43,7 @@ glm::mat4 myMatrix, matrRot;
 
 // elemente pentru matricea de vizualizare
 float Refx=-30.0f, Refy=0.0f, Refz=0.0f;
-float alpha = PI/8, beta = - PI / 2, dist=400.0f;
+float alpha = PI/10, beta = - PI / 2, dist=600.0f;
 float Obsx, Obsy, Obsz;
 
 float Vx=0.0, Vy=0.0, Vz=1.0;
@@ -115,6 +115,12 @@ void processNormalKeys(unsigned char key, int x, int y)
         case '8':
             alpha += 0.01;
             break;
+        case '+':
+            dist += 20;
+            break;
+        case '-':
+            dist -= 20;
+            break;
 
 	}
 if (key == 27)
@@ -150,9 +156,9 @@ void CreateVBO(void)
         // coordonate                    // culori			// normale
         // varfuri tabletop
        -350.0f,  -150.0f, 0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
-        350.0f,  -150.0f, 0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
-        350.0f,  250.0f,  0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
-       -350.0f,  250.0f,  0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
+        310.0f,  -150.0f, 0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
+        310.0f,  200.0f,  0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
+       -350.0f,  200.0f,  0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f,
        // varfuri cub == object #0
        -200.0f,  -30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,   -1.0f, -1.0f, -1.0f, //  4
        -140.0f,  -30.0f,   0.0f, 1.0f,    1.0f, 0.3f, 0.0f,    1.0f, -1.0f, -1.0f, //  5
@@ -196,29 +202,29 @@ void CreateVBO(void)
          2.5f,   -35.0f,   1.0f, 1.0f,    0.0f, 1.0f, 0.3f,   1.0f, 1.0f, 1.0f, // 35
          
         // varfuri picior masa
-       -350.0f,  -150.0f, -300.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 36
-       -350.0f,  -130.0f, -300.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 37
-       -330.0f,  -130.0f, -300.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 38
-       -330.0f,  -150.0f, -300.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 39
+       -350.0f,  -150.0f, -200.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 36
+       -350.0f,  -130.0f, -200.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 37
+       -330.0f,  -130.0f, -200.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 38
+       -330.0f,  -150.0f, -200.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 39
        -350.0f,  -150.0f,    0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 40
        -350.0f,  -130.0f,    0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 41
        -330.0f,  -130.0f,    0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 42
        -330.0f,  -150.0f,    0.0f, 1.0f,   0.729f, 0.549f, 0.388f,  0.0f, 0.0f, 1.0f, // 43
 
         // varfuri picior masa pentru muchii/contur
-       -350.0f,  -150.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 44
-       -350.0f,  -130.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 45
-       -330.0f,  -130.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 46
-       -330.0f,  -150.0f, -300.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 47
+       -350.0f,  -150.0f, -200.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 44
+       -350.0f,  -130.0f, -200.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 45
+       -330.0f,  -130.0f, -200.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 46
+       -330.0f,  -150.0f, -200.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 47
        -350.0f,  -150.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 48
        -350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 49
        -330.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 50
        -330.0f,  -150.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 51
 
        // varfuri tabletop pentru contur
-       -350.0f,  -530.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 52
-        350.0f,  -530.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 53
-        350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 54
+       -350.0f,  -480.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 52
+        310.0f,  -480.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 53
+        310.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 54
        -350.0f,  -130.0f,    0.0f, 1.0f,   0.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, // 55
     };
 
@@ -451,7 +457,7 @@ void RenderFunction(void)
 
   glLineWidth(3);
 
-      //desenare primul picior al mesei
+  //desenare primul picior al mesei
   codCol = 0;
   glUniform1i(codColLocation, codCol);
   myMatrix = glm::mat4(1.0f);
@@ -463,7 +469,7 @@ void RenderFunction(void)
   //desenare al doilea picior al mesei
   codCol = 0;
   glUniform1i(codColLocation, codCol);
-  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(680, 0, 0));
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(640, 0, 0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
@@ -472,7 +478,7 @@ void RenderFunction(void)
   //desenare al treilea picior al mesei
   codCol = 0;
   glUniform1i(codColLocation, codCol);
-  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(680, 380, 0));
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(640, 330, 0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
@@ -482,7 +488,7 @@ void RenderFunction(void)
   
   codCol = 0;
   glUniform1i(codColLocation, codCol);
-  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 380, 0));
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0, 330, 0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, (void*)(129));
@@ -493,7 +499,7 @@ void RenderFunction(void)
   /*
   codCol = 0;
   glUniform1i(codColLocation, codCol);*/
-  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(200, -380, 0));
+  myMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(250, -380, 0));
   myMatrixLocation = glGetUniformLocation(ProgramId, "myMatrix");
   glUniformMatrix4fv(myMatrixLocation, 1, GL_FALSE, &myMatrix[0][0]);
   glDrawElements(GL_LINES, 8, GL_UNSIGNED_BYTE, (void*)(191));
